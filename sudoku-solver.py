@@ -13,7 +13,7 @@ board = [
 def print_board(board):
     for i in range(len(board)):
         if i%3 == 0 and i != 0:
-            print("- - - - - - - - - - - - - - - - ")
+            print("- - - - - - - - - - - - - - - ")
         for j in range (len(board[0])):
             
             if j%3 == 0 and j != 0:
@@ -74,12 +74,20 @@ def solve_board(board):
                 return True
 
             board[row][col] = 0
-
     return False
 
+def make_board(board):
 
+    for i in range(len(board)):
+        for j in range(len(board[0])):
+            for m in range (1,10):
+                if is_valid_move(board,i,(i,j)):
+                    board[i][j] = m
+
+# b1 = [[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]]
+# make_board(b1)
+# print_board(b1)
 print_board(board)
-# slove_board(board)
 solve_board(board)
-print("sloved")
+print("solved")
 print_board(board)
