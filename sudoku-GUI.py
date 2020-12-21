@@ -2,10 +2,10 @@ import pygame, sys
 from sudokuSolver import *
 
 def drawGrid(grid,screen,board):
-    """
-    parm: the grid size (for 9*9 give 9), pygame screen, the sudoku board
+    '''
+    parm: int - the grid size (for 9*9 give 9), pygame screen, the sudoku board
     it draws lines every 3 blocks, grids, and the text of the sudoku board
-    """
+    '''
     blockSize = int(size[0]/grid) # width/no. of grids
     for x in range(grid):
         if x % 3 == 0 and x != 0:
@@ -25,12 +25,12 @@ def drawGrid(grid,screen,board):
             screen.blit(text, (x*blockSize+20,y*blockSize+9))
 
 def mouseClick(pos,screen):
-    """
+    '''
     parm: click position and screen 
     return: index of grid click, returns False when not click in grid
     how: the grind is drawn using width/no. of cols (here: 540/9 which is 60)
     so mouse click pos divided by 60 gives us the grid index which was clicked.
-    """
+    '''
     x = int(pos[0]//(size[0]/9))
     y = int(pos[1]//(size[0]/9))
     if x < 9 and y < 9:
@@ -47,7 +47,7 @@ size = width, heigh = 540,600
 black = (0,0,0)
 white = (255,255,255)
 red = (255,0,0)
-boxSelected = False
+boxSelected = False # is any box selected in the grid
 val = 0
 
 board = [
@@ -113,7 +113,7 @@ while 1:
                 pygame.display.update()
             if event.key == pygame.K_LEFT or event.key == 104:  # leftkey or h
                 if boxSelected:
-                    if x == 0:
+                    if x == 0: # if can't go left anymore start at right side
                         x = 8
                     else:
                         x-= 1
@@ -152,8 +152,8 @@ while 1:
                     x = 0
                     boxSelected = True
             if event.key == 114: # r key to gen new board
-                board = [[0 for i in range(9)] for i in range(9)]
-                make_board(board)
+                board = make_board(board)
+                boardBackup = board
 
 
     screen.fill(white)

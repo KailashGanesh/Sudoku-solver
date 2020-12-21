@@ -77,7 +77,7 @@ def solve_board(board):
             board[row][col] = 0
     return False
 
-def make_board(board,generateBoard):
+def make_or_slove_board(board,generateBoard=False):
     '''
     parm: sudoku board, bool should generate new board
     modifies the board value
@@ -97,18 +97,31 @@ def make_board(board,generateBoard):
         if is_valid_move(board,num,(row,col)):
             board[row][col] = num
 
-            if make_board(board,generateBoard):
+            if make_or_slove_board(board,generateBoard):
                 return True
 
             board[row][col] = 0
     return False
 
+def make_board(board):
+    '''
+    makes a empty array 9*9 of zeros,
+    sends board to make_or_slove_board() to genrate a new sudoku board
+    makes 4 or 5 numbers in each row = 0
+    '''
+    board = [[0 for i in range(9)] for i in range(9)]
+    make_or_slove_board(board,True)
+    for i in range(9):
+        randRange = random.choice([4,5])
+        for j in range(randRange):
+            randnum = random.randint(0,8)
+            board[i][randnum] = 0
+    return board
+
 if __name__ == "__main__":
     print_board(board)
-    make_board(board,False)
+    make_or_slove_board(board)
     print("--------------------")
     print_board(board)
-    board = [[0 for i in range(9)] for i in range(9)]
-    make_board(board,True)
     print("--------------------")
-    print_board(board)
+    print_board(make_board(board))
