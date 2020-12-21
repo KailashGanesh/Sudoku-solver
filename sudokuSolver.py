@@ -1,3 +1,4 @@
+import random
 board = [
     [7,8,0,4,0,0,1,2,0],
     [6,0,0,0,7,5,0,0,9],
@@ -76,19 +77,38 @@ def solve_board(board):
             board[row][col] = 0
     return False
 
-def make_board(board):
+def make_board(board,generateBoard):
+    '''
+    parm: sudoku board, bool should generate new board
+    modifies the board value
+    '''
+    spot = find_empty_spot(board)
 
-    for i in range(len(board)):
-        for j in range(len(board[0])):
-            for m in range (1,10):
-                if is_valid_move(board,i,(i,j)):
-                    board[i][j] = m
+    if spot == False:
+        return True
+    else:
+        row, col = spot
 
-# b1 = [[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0]]
-# make_board(b1)
-# print_board(b1)
-if __name__ == main:
+    for i in range(1,10):
+        if generateBoard:
+            num = random.randint(1,9)
+        else:
+            num = i
+        if is_valid_move(board,num,(row,col)):
+            board[row][col] = num
+
+            if make_board(board,generateBoard):
+                return True
+
+            board[row][col] = 0
+    return False
+
+if __name__ == "__main__":
     print_board(board)
-    solve_board(board)
-    print("solved")
+    make_board(board,False)
+    print("--------------------")
+    print_board(board)
+    board = [[0 for i in range(9)] for i in range(9)]
+    make_board(board,True)
+    print("--------------------")
     print_board(board)
