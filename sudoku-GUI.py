@@ -1,6 +1,38 @@
 import pygame, sys
 from sudokuSolver import *
 
+def solve_board_viz(board):
+    '''
+    sloves the board while also displaying it's working on pygame screen
+    '''
+    spot = find_empty_spot(board)
+
+    if spot == False:
+        return True
+    else:
+        row, col = spot
+
+    for i in range(1,10):
+        if is_valid_move(board,i,(row,col)):
+            board[row][col] = i
+            
+            screen.fill(white)
+            drawGrid(9,screen,board)
+            pygame.display.update()
+            pygame.time.delay(20) 
+
+            if solve_board_viz(board):
+                return True
+
+            board[row][col] = 0
+
+            screen.fill(white)
+            drawGrid(9,screen,board)
+            pygame.display.update()
+            pygame.time.delay(20) 
+
+    return False
+
 def drawGrid(grid,screen,board):
     '''
     parm: int - the grid size (for 9*9 give 9), pygame screen, the sudoku board
@@ -49,6 +81,8 @@ white = (255,255,255)
 red = (255,0,0)
 boxSelected = False # is any box selected in the grid
 val = 0
+StatusValue = " " # status text
+StatusColor = red
 
 board = [
     [7,8,0,4,0,0,1,2,0],
@@ -79,12 +113,14 @@ while 1:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: sys.exit() 
         if event.type == pygame.MOUSEBUTTONDOWN:
+            StatusValue = " " # status text
             pos = pygame.mouse.get_pos()
             index = mouseClick(pos,screen)
             if index != False:
                 y,x = index
                 boxSelected = True
         if event.type == pygame.KEYDOWN: 
+            StatusValue = " " # status text
             print(event.key)
             if event.key == 120: # x key quits app
                 sys.exit()
@@ -108,7 +144,7 @@ while 1:
                 val = 9  
             if event.key == pygame.K_SPACE: # space key sloves full board
                 board = boardBackup
-                solve_board(board)
+                solve_board_viz(board)
                 boxSelected = False
                 pygame.display.update()
             if event.key == pygame.K_LEFT or event.key == 104:  # leftkey or h
@@ -169,8 +205,12 @@ while 1:
                     board[y][x] = val
                 else:
                     print("wrong")
-                val = 0
+                    StatusValue = "WRONG!"
+                    StatusColor = red
+                    val = 0
             else:
                 val = 0
-
+    screen.blit(myfont.render(str(StatusValue),True,StatusColor),(0,540))
+    for i in range(len(board)):
+        print(0 in board[i])
     pygame.display.update()

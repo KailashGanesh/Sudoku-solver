@@ -96,7 +96,6 @@ def make_or_slove_board(board,generateBoard=False):
             num = i
         if is_valid_move(board,num,(row,col)):
             board[row][col] = num
-
             if make_or_slove_board(board,generateBoard):
                 return True
 
