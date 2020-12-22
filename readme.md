@@ -1,6 +1,6 @@
 # Sudoku game with backtracking algorithm Solver 
 
-<img src="img/sudoku.gif" width="440" height="500">  
+<img src="https://raw.githubusercontent.com/KailashGanesh/Sudoku-solver/master/Img/sudoku.gif" width="440" height="500">  
 
 ## Instructions
 ### Install
