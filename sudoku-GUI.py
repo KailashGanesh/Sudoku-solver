@@ -1,8 +1,20 @@
 import pygame, sys
 from sudokuSolver import *
 
-def solve_board_viz(board):
+def isBoardSloved(board):
     '''
+    parm: (sudoku board array)
+    return: True if no 0 present in board, False if 0 present
+    '''
+    for i in range(len(board)):
+        if 0 in board[i]:
+            return False
+        elif i == 8:
+            return True
+
+def solveBoardViz(board):
+    '''
+    parm: sudoku board array
     sloves the board while also displaying it's working on pygame screen
     '''
     spot = find_empty_spot(board)
@@ -21,7 +33,7 @@ def solve_board_viz(board):
             pygame.display.update()
             pygame.time.delay(20) 
 
-            if solve_board_viz(board):
+            if solveBoardViz(board):
                 return True
 
             board[row][col] = 0
@@ -71,10 +83,7 @@ def mouseClick(pos,screen):
         return y,x
     return False
 
-pygame.font.init()
-pygame.init()
 
-myfont = pygame.font.SysFont('Comic Sans MS', 30)
 size = width, heigh = 540,600
 black = (0,0,0)
 white = (255,255,255)
@@ -95,6 +104,7 @@ board = [
     [1,2,0,0,0,7,4,0,0],
     [0,4,9,2,0,6,0,0,7]
 ]
+#boardBackup = board # does't work idk why
 boardBackup = [
     [7,8,0,4,0,0,1,2,0],
     [6,0,0,0,7,5,0,0,9],
@@ -107,6 +117,9 @@ boardBackup = [
     [0,4,9,2,0,6,0,0,7]
 ]
 print_board(board)
+pygame.font.init()
+pygame.init()
+myfont = pygame.font.SysFont('Comic Sans MS', 30)
 screen = pygame.display.set_mode(size)
 
 while 1:
@@ -144,8 +157,11 @@ while 1:
                 val = 9  
             if event.key == pygame.K_SPACE: # space key sloves full board
                 board = boardBackup
-                solve_board_viz(board)
+                solveBoardViz(board)
                 boxSelected = False
+                if isBoardSloved(board):
+                    StatusValue = "Board Solved!"
+                    StatusColor = (0,255,0)
                 pygame.display.update()
             if event.key == pygame.K_LEFT or event.key == 104:  # leftkey or h
                 if boxSelected:
@@ -203,6 +219,10 @@ while 1:
             if board[y][x] == 0:
                 if is_valid_move(board, val, (y,x)):
                     board[y][x] = val
+                    print(isBoardSloved(board))
+                    if isBoardSloved(board):
+                        StatusValue = "Board Solved!"
+                        StatusColor = (0,255,0)
                 else:
                     print("wrong")
                     StatusValue = "WRONG!"
@@ -210,7 +230,6 @@ while 1:
                     val = 0
             else:
                 val = 0
+
     screen.blit(myfont.render(str(StatusValue),True,StatusColor),(0,540))
-    for i in range(len(board)):
-        print(0 in board[i])
     pygame.display.update()

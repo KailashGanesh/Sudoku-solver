@@ -35,6 +35,9 @@ def find_empty_spot(board):
 
 # is this a valid move
 def is_valid_move(board, num, pos):
+    '''
+    input: (sudoku board array, int you want to test, row and col)
+    '''
     row,col = pos
     # checking row
     for i in range(len(board[0])):
