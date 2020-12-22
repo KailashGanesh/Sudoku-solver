@@ -16,7 +16,7 @@ def isBoardSloved(board):
 def solveBoardViz(board):
     '''
     parm: sudoku board array
-    sloves the board while also displaying it's working on pygame screen
+    solves the board while also displaying it's working on pygame screen
     '''
     spot = find_empty_spot(board)
 
@@ -143,7 +143,7 @@ while 1:
                 val = 8
             if event.key == pygame.K_9: 
                 val = 9  
-            if event.key == pygame.K_SPACE: # space key sloves full board
+            if event.key == pygame.K_SPACE: # space key solves full board
                 board = boardBackup # not at fault
                 board = copy.deepcopy(boardBackup)
                 solveBoardViz(board)
