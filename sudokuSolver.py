@@ -105,7 +105,7 @@ def make_or_slove_board(board,generateBoard=False):
             board[row][col] = 0
     return False
 
-def make_board(board):
+def make_board():
     '''
     makes a empty array 9*9 of zeros,
     sends board to make_or_slove_board() to genrate a new sudoku board

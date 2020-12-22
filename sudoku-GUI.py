@@ -1,5 +1,6 @@
 import pygame, sys
 from sudokuSolver import *
+import copy
 
 def isBoardSloved(board):
     '''
@@ -78,11 +79,9 @@ def mouseClick(pos,screen):
     x = int(pos[0]//(size[0]/9))
     y = int(pos[1]//(size[0]/9))
     if x < 9 and y < 9:
-        print(pos)
-        print(board[y][x])
+        #print(pos,board[y][x])
         return y,x
     return False
-
 
 size = width, heigh = 540,600
 black = (0,0,0)
@@ -104,23 +103,13 @@ board = [
     [1,2,0,0,0,7,4,0,0],
     [0,4,9,2,0,6,0,0,7]
 ]
-#boardBackup = board # does't work idk why
-boardBackup = [
-    [7,8,0,4,0,0,1,2,0],
-    [6,0,0,0,7,5,0,0,9],
-    [0,0,0,6,0,1,0,7,8],
-    [0,0,7,0,4,0,2,6,0],
-    [0,0,1,0,5,0,9,3,0],
-    [9,0,4,0,6,0,0,0,5],
-    [0,7,0,3,0,0,0,1,2],
-    [1,2,0,0,0,7,4,0,0],
-    [0,4,9,2,0,6,0,0,7]
-]
-print_board(board)
+boardBackup = copy.deepcopy(board) # makes copy of board, insted of just referance
+
 pygame.font.init()
 pygame.init()
 myfont = pygame.font.SysFont('Comic Sans MS', 30)
 screen = pygame.display.set_mode(size)
+pygame.display.set_caption("Sudoku")
 
 while 1:
     for event in pygame.event.get():
@@ -134,7 +123,6 @@ while 1:
                 boxSelected = True
         if event.type == pygame.KEYDOWN: 
             StatusValue = " " # status text
-            print(event.key)
             if event.key == 120: # x key quits app
                 sys.exit()
             if event.key == pygame.K_1: 
@@ -156,7 +144,8 @@ while 1:
             if event.key == pygame.K_9: 
                 val = 9  
             if event.key == pygame.K_SPACE: # space key sloves full board
-                board = boardBackup
+                board = boardBackup # not at fault
+                board = copy.deepcopy(boardBackup)
                 solveBoardViz(board)
                 boxSelected = False
                 if isBoardSloved(board):
@@ -204,8 +193,11 @@ while 1:
                     x = 0
                     boxSelected = True
             if event.key == 114: # r key to gen new board
-                board = make_board(board)
-                boardBackup = board
+                boardBackup = make_board()
+                board = copy.deepcopy(boardBackup)
+                #boardBackup = board
+                StatusValue = "New Board!"
+                StatusColor = (0,0,255)
 
 
     screen.fill(white)
@@ -219,17 +211,14 @@ while 1:
             if board[y][x] == 0:
                 if is_valid_move(board, val, (y,x)):
                     board[y][x] = val
-                    print(isBoardSloved(board))
                     if isBoardSloved(board):
                         StatusValue = "Board Solved!"
                         StatusColor = (0,255,0)
                 else:
-                    print("wrong")
                     StatusValue = "WRONG!"
                     StatusColor = red
                     val = 0
             else:
                 val = 0
-
     screen.blit(myfont.render(str(StatusValue),True,StatusColor),(0,540))
     pygame.display.update()
